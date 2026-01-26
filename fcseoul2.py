@@ -40,14 +40,14 @@ CONFIG = {
 
     "chants": [
         {"title": "우리의 서울", "lyrics": "서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n수많은 밤을 보내며 너와 나 지쳐갈 때면\n우린 때로 끝을 바라겠지만   그 어둠 속에서\n아파했던 맘은 언젠가는 다 희미해질 거야\n메마른 밤의 끝에서 조금은 힘들겠지만\n똑같은 어젠 오지 않을 거라고\n나의 손을 잡아 이 밤을 열고\n밝은 빛을 찾아   우린 나아갈 거야 함께\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n아침을 맞이하고서 너와 나 마주볼 때면\n슬픔 가득한 기억도 있겠지만\n그 시간 속에서 너와 나 함께면\n두려움은 없을 것만 같아 우린\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울"},
-        {"title": "응원가", "lyrics": "응원가 가사"},
+        {"title": "FC서울의 승리를", "lyrics": "|: FC서울의 승리를\nFC서울의 승리를\nFC서울 오늘 승리하리라\nFC서울의 승리를\nFC서울 알레오 (서울)\nFC서울 알레오 (서울)\nFC서울 알레알레오\nFC서울 알레오 (서울) :|\n|: 알레 알레 알레오 알레오 (서울)\n알레 알레 알레오 알레오 (서울)\n알레 알레 알레오 알레 알레 알레오\n알레 알레 알레오 알레오 (서울) :|"},
     ],
     "chants_link": "https://www.instagram.com/fcseoul/",
 
     "key_players": [
-        {"name": "키플레이어 A", "role": "공격수", "one_liner": "강한 슈팅과 세밀한 골결정력"},
-        {"name": "키플레이어 B", "role": "미드필더", "one_liner": "넓은 시야와 창의적인 패스"},
-        {"name": "키플레이어 C", "role": "수비수", "one_liner": "빠른 발과 강한 몸싸움"},
+        {"name": "송민규", "role": "공격수", "one_liner": "빠른 침투과 현란한 드리블"},
+        {"name": "김진수", "role": "수비수", "one_liner": "노련한 수비와 날카로운 크로스"},
+        {"name": "강현무", "role": "골키퍼", "one_liner": "뛰어난 반사신경과 안정적인 수비"},
     ],
 
 
@@ -56,9 +56,9 @@ CONFIG = {
         "max_chars": 10,
     },
 
-    "impressive_players": ["선수 A", "선수 B", "선수 C", "선수 D"],
+    "impressive_players": ["송민규", "문선민", "정승원", "조영욱"],
 
-    "mom_candidates": ["선수 A", "선수 B", "선수 C", "선수 D"],
+    "mom_candidates": ["송민규", "문선민", "정승원", "조영욱"],
 }
 
 
@@ -203,8 +203,19 @@ with tab1:
                         "match": f"{m['home']} vs {m['away']} ({m['date']})",
                     },
                 )
-                st.success("제출 완료!")
 
+        st.subheader("Man of the Match 예측하기")
+
+        final_mom = ""
+
+        with st.form("form_mom"):
+            mom_pick = st.selectbox("오늘의 MOM을 예측하세요", CONFIG["mom_candidates"])
+            mom_custom = ""
+            if mom_pick == "기타(직접 입력)":
+                mom_custom = st.text_input("직접 입력", placeholder="선수 이름")
+
+            comment = st.text_input("FC 서울을 위한 응원 한마디")
+            submitted_m = st.form_submit_button("MOM 투표 제출")
 
     with t_half:
         st.subheader("하프타임 퀴즈")
@@ -222,9 +233,6 @@ with tab1:
             impressive_pick = st.selectbox("선수 선택", CONFIG["impressive_players"])
 
             impressive_custom = ""
-            if impressive_pick == "기타(직접 입력)":
-                impressive_custom = st.text_input("직접 입력", placeholder="선수 이름")
-
             submitted_h = st.form_submit_button("제출")
 
         if submitted_h:
@@ -249,41 +257,6 @@ with tab1:
                     )
                     st.success("제출 완료!")
 
-    with t_mom:
-        st.subheader("Man of the Match 투표")
-
-        final_mom = ""
-
-        with st.form("form_mom"):
-            mom_pick = st.selectbox("MOM을 선택하세요", CONFIG["mom_candidates"])
-            mom_custom = ""
-            if mom_pick == "기타(직접 입력)":
-                mom_custom = st.text_input("직접 입력", placeholder="선수 이름")
-
-            comment = st.text_input("한 줄 코멘트", placeholder="예: 첫번째 득점이 멋있었다.")
-            submitted_m = st.form_submit_button("MOM 투표 제출")
-
-        if submitted_m:
-            if nickname.strip() == "":
-                st.error("닉네임을 먼저 입력해 주세요.")
-            else:
-                final_mom = mom_custom.strip() if mom_pick == "기타(직접 입력)" else mom_pick
-                if final_mom == "":
-                    st.error("MOM을 입력/선택해 주세요.")
-                else:
-                    append_row(
-                        MOM_PATH,
-                        {
-                            "ts": now_kst_str(),
-                            "nickname": nickname.strip(),
-                            "phone4": phone4.strip(),
-                            "new_fan": is_new_fan,
-                            "mom": final_mom,
-                            "comment": comment.strip(),
-                            "match": f"{m['home']} vs {m['away']} ({m['date']})",
-                        },
-                    )
-                    st.success("투표 완료!")
 # 탭 2: 오늘의 정보
 with tab2:
     c1, c2, c3 = st.columns([1, 1, 1], gap="large")
@@ -301,7 +274,7 @@ with tab2:
         for ch in CONFIG["chants"]:
             with st.container(border=True):
                 st.markdown(f"**{ch['title']}**")
-                st.write(ch["lyrics"])
+                st.text(ch["lyrics"])
 
     with c3:
         st.subheader("키플레이어 소개")
