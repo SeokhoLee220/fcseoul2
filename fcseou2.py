@@ -1,0 +1,425 @@
+import os
+import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+import pandas as pd
+import streamlit as st
+from PIL import Image, ImageDraw
+
+MAP_PATH = "assets/2번 출입구.jpg"
+
+
+st.set_page_config(
+    page_title="FC서울 팬 참여 허브",
+    layout="wide",
+)
+
+KST = ZoneInfo("Asia/Seoul")
+
+
+
+CONFIG = {
+    "match": {
+        "home": "FC서울",
+        "away": "상대팀",
+        "date": "2026-04-23",
+        "kickoff": "05:30",
+        "venue": "서울월드컵경기장(상암)",
+    },
+
+
+    "score_max": 7,
+
+    "watch_points": [
+        "초반 압박 강도와 전환",
+        "측면 돌파",
+        "수비 라인",
+    ],
+
+
+    "chants": [
+        {"title": "우리의 서울", "lyrics": "서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n수많은 밤을 보내며 너와 나 지쳐갈 때면\n우린 때로 끝을 바라겠지만   그 어둠 속에서\n아파했던 맘은 언젠가는 다 희미해질 거야\n메마른 밤의 끝에서 조금은 힘들겠지만\n똑같은 어젠 오지 않을 거라고\n나의 손을 잡아 이 밤을 열고\n밝은 빛을 찾아   우린 나아갈 거야 함께\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n아침을 맞이하고서 너와 나 마주볼 때면\n슬픔 가득한 기억도 있겠지만\n그 시간 속에서 너와 나 함께면\n두려움은 없을 것만 같아 우린\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 우리의 서울 너와 나 함께 오늘을 기억할 거야\n서울 우리의 서울 언제나 우리 내일을 노래할 거야\n서울 서울 서울 서울"},
+        {"title": "응원가", "lyrics": "응원가 가사"},
+    ],
+    "chants_link": "https://www.instagram.com/fcseoul/",
+
+    "key_players": [
+        {"name": "키플레이어 A", "role": "공격수", "one_liner": "강한 슈팅과 세밀한 골결정력"},
+        {"name": "키플레이어 B", "role": "미드필더", "one_liner": "넓은 시야와 창의적인 패스"},
+        {"name": "키플레이어 C", "role": "수비수", "one_liner": "빠른 발과 강한 몸싸움"},
+    ],
+
+
+    "halftime_short": {
+        "question": "하프타임 퀴즈",
+        "max_chars": 10,
+    },
+
+    "impressive_players": ["선수 A", "선수 B", "선수 C", "선수 D"],
+
+    "mom_candidates": ["선수 A", "선수 B", "선수 C", "선수 D"],
+}
+
+
+DATA_DIR = "data"
+os.makedirs(DATA_DIR, exist_ok=True)
+
+RESP_PATH = os.path.join(DATA_DIR, "responses.csv")
+PRED_PATH = os.path.join(DATA_DIR, "predictions.csv")
+QUIZ_PATH = os.path.join(DATA_DIR, "halftime.csv")
+MOM_PATH = os.path.join(DATA_DIR, "mom.csv")
+
+
+def now_kst() -> datetime:
+    return datetime.now(tz=KST)
+
+def now_kst_str() -> str:
+    return now_kst().strftime("%Y-%m-%d %H:%M:%S")
+
+def parse_kickoff_kst(match_cfg: dict) -> datetime:
+    dt_str = f"{match_cfg['date']} {match_cfg['kickoff']}:00"
+    # timezone-aware KST
+    return datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
+
+def append_row(csv_path: str, row: dict):
+    df = pd.DataFrame([row])
+    if os.path.exists(csv_path):
+        df.to_csv(csv_path, mode="a", header=False, index=False, encoding="utf-8-sig")
+    else:
+        df.to_csv(csv_path, index=False, encoding="utf-8-sig")
+
+def load_csv(csv_path: str) -> pd.DataFrame:
+    if not os.path.exists(csv_path):
+        return pd.DataFrame()
+    return pd.read_csv(csv_path, encoding="utf-8-sig")
+
+
+m = CONFIG["match"]
+kickoff_dt = parse_kickoff_kst(m)
+is_before_kickoff = now_kst() < kickoff_dt
+
+st.title("FC서울 팬 참여 허브")
+st.caption(
+    f"{m['date']}  |  {m['home']} vs {m['away']}  |  킥오프 {m['kickoff']} (KST)  |  {m['venue']}"
+)
+
+with st.container(border=True):
+    st.write(f"현재 시각(KST): **{now_kst().strftime('%Y-%m-%d %H:%M:%S')}**")
+    st.write(f"킥오프(KST): **{kickoff_dt.strftime('%Y-%m-%d %H:%M:%S')}**")
+    if is_before_kickoff:
+        st.success("스코어 예측 제출 가능")
+    else:
+        st.warning("스코어 예측은 **경기 시작 전까지만** 제출 가능합니다.")
+
+st.divider()
+
+
+with st.container(border=True):
+    st.subheader("이용자 확인")
+    st.write("스탬프/추첨 집계를 위해 **닉네임 + 휴대폰 뒤 4자리**만 입력해 주세요.")
+    colA, colB, colC = st.columns([2, 1, 1])
+
+    with colA:
+        nickname = st.text_input("닉네임", placeholder="예: seoul_fan")
+    with colB:
+        phone4 = st.text_input("휴대폰 뒤 4자리", max_chars=4, placeholder="1234")
+    with colC:
+        is_new_fan = st.selectbox("신규 팬인가요?", ["신규", "기존"])
+
+    if nickname.strip() == "":
+        st.warning("닉네임을 입력하면 참여 기능이 활성화됩니다.")
+
+st.divider()
+
+tab1, tab2, tab3 = st.tabs(["오늘의 이벤트", "오늘의 정보", "경기장 정보"])
+
+# 탭 1: 오늘의 이벤트
+
+with tab1:
+    t_pred, t_half, t_mom = st.tabs(["승부 예측", "하프타임 퀴즈", "오늘의 MOM"])
+
+    with t_pred:
+        st.subheader("경기 전: 승부 예측")
+
+        with st.form("form_prediction"):
+            pred = st.radio(
+                "결과를 선택하세요 (승/무/패)",
+                ["FC서울 승", "무승부", "FC서울 패"],
+                horizontal=True,
+                disabled=not is_before_kickoff,
+            )
+
+            score_opts = ["선택하세요"] + list(range(0, CONFIG["score_max"] + 1))
+
+            st.caption("스코어를 예측하세요.")
+            col_s1, col_s2 = st.columns(2)
+            with col_s1:
+                seoul_goals = st.selectbox(
+                    "서울 득점",
+                    score_opts,
+                    index=0,
+                    disabled=not is_before_kickoff,
+                )
+            with col_s2:
+                seoul_conceded = st.selectbox(
+                    "서울 실점",
+                    score_opts,
+                    index=0,
+                    disabled=not is_before_kickoff,
+                )
+
+            if seoul_goals > seoul_conceded:
+                auto_pred = "FC서울 승"
+            elif seoul_goals == seoul_conceded:
+                auto_pred = "무승부"
+            else:
+                auto_pred = "FC서울 패"
+
+
+            submitted = st.form_submit_button(
+                "예측 제출",
+                
+                disabled=(not is_before_kickoff)
+            )    
+            
+        if submitted:
+            if not (now_kst() < kickoff_dt):
+                st.error("경기 시작 이후에는 승패/스코어 예측 제출이 불가합니다.")
+            elif nickname.strip() == "":
+                st.error("닉네임을 먼저 입력해 주세요.")
+            else:
+                append_row(
+                    PRED_PATH,
+                    {
+                        "ts": now_kst_str(),
+                        "nickname": nickname.strip(),
+                        "phone4": phone4.strip(),
+                        "new_fan": is_new_fan,
+                        "prediction": pred,
+                        "auto_prediction": auto_pred,
+                        "seoul_goals": seoul_goals,
+                        "seoul_conceded": seoul_conceded,
+                        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+                    },
+                )
+                st.success("제출 완료!")
+
+
+    with t_half:
+        st.subheader("하프타임 퀴즈")
+
+        final_player = ""    
+
+        with st.form("form_halftime"):
+            short_q = st.text_input(
+                CONFIG["halftime_short"]["question"],
+                max_chars=CONFIG["halftime_short"]["max_chars"],
+            )
+
+            st.divider()
+            st.caption("전반전에 인상깊었던 선수")
+            impressive_pick = st.selectbox("선수 선택", CONFIG["impressive_players"])
+
+            impressive_custom = ""
+            if impressive_pick == "기타(직접 입력)":
+                impressive_custom = st.text_input("직접 입력", placeholder="선수 이름")
+
+            submitted_h = st.form_submit_button("제출")
+
+        if submitted_h:
+            if nickname.strip() == "":
+                st.error("닉네임을 먼저 입력해 주세요.")
+            else:
+                final_player = impressive_custom.strip() if impressive_pick == "기타(직접 입력)" else impressive_pick
+                if final_player == "":
+                    st.error("인상깊었던 선수를 선택해 주세요.")
+                else:
+                    append_row(
+                        QUIZ_PATH,
+                        {
+                            "ts": now_kst_str(),
+                            "nickname": nickname.strip(),
+                            "phone4": phone4.strip(),
+                            "new_fan": is_new_fan,
+                            "halftime_short_answer": short_q.strip(),
+                            "impressive_player": final_player,
+                            "match": f"{m['home']} vs {m['away']} ({m['date']})",
+                        },
+                    )
+                    st.success("제출 완료!")
+
+    with t_mom:
+        st.subheader("Man of the Match 투표")
+
+        final_mom = ""
+
+        with st.form("form_mom"):
+            mom_pick = st.selectbox("MOM을 선택하세요", CONFIG["mom_candidates"])
+            mom_custom = ""
+            if mom_pick == "기타(직접 입력)":
+                mom_custom = st.text_input("직접 입력", placeholder="선수 이름")
+
+            comment = st.text_input("한 줄 코멘트", placeholder="예: 첫번째 득점이 멋있었다.")
+            submitted_m = st.form_submit_button("MOM 투표 제출")
+
+        if submitted_m:
+            if nickname.strip() == "":
+                st.error("닉네임을 먼저 입력해 주세요.")
+            else:
+                final_mom = mom_custom.strip() if mom_pick == "기타(직접 입력)" else mom_pick
+                if final_mom == "":
+                    st.error("MOM을 입력/선택해 주세요.")
+                else:
+                    append_row(
+                        MOM_PATH,
+                        {
+                            "ts": now_kst_str(),
+                            "nickname": nickname.strip(),
+                            "phone4": phone4.strip(),
+                            "new_fan": is_new_fan,
+                            "mom": final_mom,
+                            "comment": comment.strip(),
+                            "match": f"{m['home']} vs {m['away']} ({m['date']})",
+                        },
+                    )
+                    st.success("투표 완료!")
+# 탭 2: 오늘의 정보
+with tab2:
+    c1, c2, c3 = st.columns([1, 1, 1], gap="large")
+
+    with c1:
+        st.subheader("오늘의 관전 포인트")
+        for wp in CONFIG["watch_points"]:
+            with st.container(border=True):
+                st.write("• " + wp)
+
+    with c2:
+        st.subheader("오늘의 응원가")
+        if CONFIG.get("chants_link"):
+            st.link_button("응원가 영상/릴스 보기", CONFIG["chants_link"])
+        for ch in CONFIG["chants"]:
+            with st.container(border=True):
+                st.markdown(f"**{ch['title']}**")
+                st.write(ch["lyrics"])
+
+    with c3:
+        st.subheader("키플레이어 소개")
+        for kp in CONFIG["key_players"]:
+            with st.container(border=True):
+                st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
+                st.write(kp["one_liner"])
+
+
+# 탭 3: 경기장 정보
+with tab3:
+    left2, right2 = st.columns([1.2, 1], gap="large")
+    
+    with left2:
+        st.subheader("서울월드컵경기장 지도 & 추천 경로")
+    
+        if os.path.exists(MAP_PATH):
+                img = Image.open(MAP_PATH)
+                st.image(img, use_container_width=True)
+        else:
+                st.warning("지도 이미지가 없습니다. assets/서울월드컵경기장.gif 경로를 확인하세요.")
+    
+        st.markdown("**추천 루트**")
+        st.write("입장 → 포토존 → 좌석 → 화장실/편의점 → 좌석")
+
+    with right2:
+        st.subheader(" 주요 위치 안내")
+        with st.container(border=True):
+            st.markdown("**입구**")
+            st.write("안내 문구")
+        with st.container(border=True):
+            st.markdown("**포토존**")
+            st.write("오늘의 포토존 위치")
+        with st.container(border=True):
+            st.markdown("**화장실 / 편의점**")
+            st.write("가까운 위치를 구역 기준으로 안내")
+
+import gspread
+from google.oauth2.service_account import Credentials
+
+@st.cache_resource
+def get_gsheet():
+    creds_dict = dict(st.secrets["google"])
+    scopes = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive",
+    ]
+    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+    gc = gspread.authorize(creds)
+
+    spreadsheet_name = st.secrets["sheets"]["spreadsheet_name"]
+    worksheet_name = st.secrets["sheets"]["worksheet_name"]
+
+    sh = gc.open(spreadsheet_name)
+
+    try:
+        ws = sh.worksheet(worksheet_name)
+    except gspread.WorksheetNotFound:
+        ws = sh.add_worksheet(title=worksheet_name, rows=1000, cols=50)
+
+    return ws
+
+def append_row_gsheet(row: dict):
+    ws = get_gsheet()
+
+    values = ws.get_all_values()
+    if len(values) == 0:
+        headers = list(row.keys())
+        ws.append_row(headers)
+    else:
+        headers = values[0]
+
+    missing = [k for k in row.keys() if k not in headers]
+    if missing:
+        headers = headers + missing
+        ws.delete_rows(1)
+        ws.insert_row(headers, 1)
+
+    row_values = [row.get(h, "") for h in headers]
+    ws.append_row(row_values, value_input_option="USER_ENTERED")
+    
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "prediction",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "prediction": pred,
+        "auto_prediction": auto_pred,
+        "seoul_goals": seoul_goals,
+        "seoul_conceded": seoul_conceded,
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
+
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "halftime",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "halftime_short_answer": short_q.strip(),
+        "impressive_player": final_player,
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
+
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "mom",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "mom": final_mom,
+        "comment": comment.strip(),
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
