@@ -176,6 +176,7 @@ with tab1:
             else:
                 auto_pred = "FC서울 패"
 
+            pred_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
 
             submitted = st.form_submit_button(
                 "예측 제출",
@@ -187,7 +188,6 @@ with tab1:
         final_mom = ""
 
         with st.form("form_mom"):
-            mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
             mom_custom = ""
 
             comment = st.text_input("FC 서울을 위한 응원 한마디")
