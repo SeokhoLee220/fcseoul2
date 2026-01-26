@@ -36,7 +36,7 @@ def set_background(image_path):
         unsafe_allow_html=True
     )
 
-set_background("assets/배경2.jpg")
+set_background("assets/배경.png")
 
 KST = ZoneInfo("Asia/Seoul")
 
