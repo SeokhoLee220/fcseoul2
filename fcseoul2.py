@@ -32,9 +32,9 @@ CONFIG = {
     "score_max": 7,
 
     "watch_points": [
-        "초반 압박 강도와 전환",
-        "측면 돌파",
-        "수비 라인",
+        "이기는 팀이 우승에 가까워지는, 사실상의 결승전.",
+        "전반 시작 후 첫 10분, 서울이 얼마나 적극적으로 공을 되찾으려 드는지 주목해 보세요.",
+        "송민규가 공을 갖지 않을 때의 위치를 살펴보세요.",
     ],
 
 
@@ -45,9 +45,9 @@ CONFIG = {
     "chants_link": "https://www.instagram.com/fcseoul/",
 
     "key_players": [
-        {"name": "송민규", "role": "공격수", "one_liner": "빠른 침투과 현란한 드리블"},
-        {"name": "김진수", "role": "수비수", "one_liner": "노련한 수비와 날카로운 크로스"},
-        {"name": "강현무", "role": "골키퍼", "one_liner": "뛰어난 반사신경과 안정적인 수비"},
+        {"name": "송민규", "role": "(공격수)", "one_liner": "빠른 침투과 현란한 드리블"},
+        {"name": "김진수", "role": "(수비수)", "one_liner": "노련한 수비와 날카로운 크로스"},
+        {"name": "강현무", "role": "(골키퍼)", "one_liner": "뛰어난 반사신경과 안정적인 수비"},
     ],
 
 
@@ -140,7 +140,7 @@ with tab1:
     t_pred, t_half= st.tabs(["승부 예측", "하프타임 퀴즈"])
 
     with t_pred:
-        st.subheader("경기 전: 승부 예측")
+        st.subheader("경기 전")
 
         with st.form("form_prediction"):
             pred = st.radio(
@@ -204,12 +204,10 @@ with tab1:
                     },
                 )
 
-        st.subheader("Man of the Match 예측하기")
-
         final_mom = ""
 
         with st.form("form_mom"):
-            mom_pick = st.selectbox("오늘의 MOM을 예측하세요", CONFIG["mom_candidates"])
+            mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
             mom_custom = ""
             if mom_pick == "기타(직접 입력)":
                 mom_custom = st.text_input("직접 입력", placeholder="선수 이름")
@@ -289,28 +287,25 @@ with tab3:
     left2, right2 = st.columns([1.2, 1], gap="large")
     
     with left2:
-        st.subheader("서울월드컵경기장 지도 & 추천 경로")
+        st.subheader("서울월드컵경기장 지도")
     
         if os.path.exists(MAP_PATH):
                 img = Image.open(MAP_PATH)
                 st.image(img, use_container_width=True)
         else:
                 st.warning("지도 이미지가 없습니다. assets/서울월드컵경기장.gif 경로를 확인하세요.")
-    
-        st.markdown("**추천 루트**")
-        st.write("입장 → 포토존 → 좌석 → 화장실/편의점 → 좌석")
+
 
     with right2:
-        st.subheader(" 주요 위치 안내")
-        with st.container(border=True):
-            st.markdown("**입구**")
-            st.write("안내 문구")
         with st.container(border=True):
             st.markdown("**포토존**")
-            st.write("오늘의 포토존 위치")
+            st.write("3번 출입구 옆 마스코트 인형")
         with st.container(border=True):
-            st.markdown("**화장실 / 편의점**")
-            st.write("가까운 위치를 구역 기준으로 안내")
+            st.markdown("**화장실**")
+            st.write("2번 출입구 옆")
+        with st.container(border=True):
+            st.markdown("**편의점**")
+            st.write("1번 출입구 옆")
 
 import gspread
 from google.oauth2.service_account import Credentials
