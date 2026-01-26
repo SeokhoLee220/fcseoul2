@@ -11,7 +11,7 @@ MAP_PATH = "assets/2번 출입구.jpg"
 
 
 st.set_page_config(
-    page_title="FC서울 팬 참여 허브",
+    page_title="WELCOME to FC서울 (2번 출입구)",
     layout="wide",
 )
 
