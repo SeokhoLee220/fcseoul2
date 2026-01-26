@@ -15,6 +15,29 @@ st.set_page_config(
     layout="wide",
 )
 
+def set_background(image_path):
+    with open(image_path, "rb") as f:
+        encoded = f.read()
+    import base64
+    encoded_bg = base64.b64encode(encoded).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded_bg}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+set_background("assets/배경.jpg")
+
 KST = ZoneInfo("Asia/Seoul")
 
 
