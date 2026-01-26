@@ -137,7 +137,7 @@ tab1, tab2, tab3 = st.tabs(["오늘의 이벤트", "오늘의 정보", "경기�
 # 탭 1: 오늘의 이벤트
 
 with tab1:
-    t_pred, t_half= st.tabs(["승부 예측", "하프타임 퀴즈"])
+    t_pred, t_half= st.tabs(["경기 전", "하프타임"])
 
     with t_pred:
         st.subheader("경기 전")
@@ -183,26 +183,6 @@ with tab1:
                 disabled=(not is_before_kickoff)
             )    
             
-        if submitted:
-            if not (now_kst() < kickoff_dt):
-                st.error("경기 시작 이후에는 승패/스코어 예측 제출이 불가합니다.")
-            elif nickname.strip() == "":
-                st.error("닉네임을 먼저 입력해 주세요.")
-            else:
-                append_row(
-                    PRED_PATH,
-                    {
-                        "ts": now_kst_str(),
-                        "nickname": nickname.strip(),
-                        "phone4": phone4.strip(),
-                        "new_fan": is_new_fan,
-                        "prediction": pred,
-                        "auto_prediction": auto_pred,
-                        "seoul_goals": seoul_goals,
-                        "seoul_conceded": seoul_conceded,
-                        "match": f"{m['home']} vs {m['away']} ({m['date']})",
-                    },
-                )
 
         final_mom = ""
 
