@@ -178,12 +178,12 @@ with tab1:
 
         final_mom = ""
 
-        with st.form("form_mom"):
-            mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
-            mom_custom = ""
 
-            comment = st.text_input("FC 서울을 위한 응원 한마디")
-            submitted_m = st.form_submit_button("제출")
+        mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
+        mom_custom = ""
+
+        comment = st.text_input("FC 서울을 위한 응원 한마디")
+        submitted_m = st.form_submit_button("제출")
 
     with t_half:
         st.subheader("하프타임 퀴즈")
