@@ -204,34 +204,9 @@ with tab1:
                 max_chars=CONFIG["halftime_short"]["max_chars"],
             )
 
-            st.divider()
-            st.caption("전반전에 인상깊었던 선수")
-            impressive_pick = st.selectbox("선수 선택", CONFIG["impressive_players"])
 
             impressive_custom = ""
             submitted_h = st.form_submit_button("제출")
-
-        if submitted_h:
-            if nickname.strip() == "":
-                st.error("닉네임을 먼저 입력해 주세요.")
-            else:
-                final_player = impressive_custom.strip() if impressive_pick == "기타(직접 입력)" else impressive_pick
-                if final_player == "":
-                    st.error("인상깊었던 선수를 선택해 주세요.")
-                else:
-                    append_row(
-                        QUIZ_PATH,
-                        {
-                            "ts": now_kst_str(),
-                            "nickname": nickname.strip(),
-                            "phone4": phone4.strip(),
-                            "new_fan": is_new_fan,
-                            "halftime_short_answer": short_q.strip(),
-                            "impressive_player": final_player,
-                            "match": f"{m['home']} vs {m['away']} ({m['date']})",
-                        },
-                    )
-                    st.success("제출 완료!")
 
 # 탭 2: 오늘의 정보
 with tab2:
