@@ -175,7 +175,10 @@ with tab1:
                 auto_pred = "무승부"
             else:
                 auto_pred = "FC서울 패"
-
+       
+        with st.form("form_mom"):
+            mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
+            mom_custom = ""
 
             submitted = st.form_submit_button(
                 "예측 제출",
@@ -206,14 +209,10 @@ with tab1:
 
         final_mom = ""
 
-        with st.form("form_mom"):
-            mom_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
-            mom_custom = ""
-            if mom_pick == "기타(직접 입력)":
-                mom_custom = st.text_input("직접 입력", placeholder="선수 이름")
 
-            comment = st.text_input("FC 서울을 위한 응원 한마디")
-            submitted_m = st.form_submit_button("MOM 투표 제출")
+
+    comment = st.text_input("FC 서울을 위한 응원 한마디")
+    submitted_m = st.form_submit_button("제출")
 
     with t_half:
         st.subheader("하프타임 퀴즈")
@@ -263,7 +262,7 @@ with tab2:
         st.subheader("오늘의 관전 포인트")
         for wp in CONFIG["watch_points"]:
             with st.container(border=True):
-                st.write("• " + wp)
+                st.write(wp)
 
     with c2:
         st.subheader("오늘의 응원가")
