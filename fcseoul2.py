@@ -417,7 +417,6 @@ if submitted and not st.session_state.pred_submitted:
             "스코어 예측": f"{seoul_goals} - {seoul_conceded}",
             "MOM" : pred_pick,
             "첫 득점자" : pred_goal,
-            "match": f"{m['home']} vs {m['away']} ({m['date']})",
             }
         )
     st.session_state.pred_submitted = True
@@ -435,7 +434,6 @@ if submitted_c and not st.session_state.pred_submitted:
             "phone4": phone4.strip(),
             "new_fan": is_new_fan,
             "응원 한마디": comment, 
-            "match": f"{m['home']} vs {m['away']} ({m['date']})",
             }
         )
     st.session_state.pred_submitted = True
@@ -452,7 +450,6 @@ if submitted_h and not st.session_state.pred_submitted:
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
         "하프타임 퀴즈 답안": short_q.strip(),
-        "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
     st.session_state.pred_submitted = True
@@ -469,7 +466,6 @@ if submitted_photo and not st.session_state.pred_submitted:
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
         "사진": uploaded_photo,
-        "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
     st.session_state.pred_submitted = True
@@ -486,7 +482,6 @@ if submitted_q1 and not st.session_state.pred_submitted:
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
         "퀴즈 답안1": comment1.strip(),
-        "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
     st.session_state.pred_submitted = True
@@ -503,7 +498,6 @@ if submitted_q2 and not st.session_state.pred_submitted:
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
         "퀴즈 답안2": comment2,
-        "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
     st.session_state.pred_submitted = True
