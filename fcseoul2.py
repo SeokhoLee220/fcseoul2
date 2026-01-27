@@ -456,33 +456,6 @@ def upload_photo_to_drive(uploaded_file, nickname: str, phone4: str, folder_id: 
 
     return created
 
-uploaded_photo = st.camera_input("포토존 사진 촬영")  # 또는 st.file_uploader
-
-if st.button("제출"):
-    photo_url = ""
-    photo_name = ""
-
-    if uploaded_photo is not None:
-        uploaded = upload_photo_to_drive(
-            uploaded_file=uploaded_photo,
-            nickname=nickname,
-            phone4=phone4,
-            folder_id=DRIVE_FOLDER_ID
-        )
-        photo_url = uploaded.get("webViewLink", "")
-        photo_name = uploaded.get("name", "")
-
-    append_row_gsheet({
-        "ts": now_kst_str(),
-        "type": "photozone",
-        "nickname": nickname.strip(),
-        "phone4": phone4.strip(),
-        "photo_name": photo_name,  
-        "photo_url": photo_url, 
-    })
-
-    st.success("업로드 및 제출 완료!")
-
 if "pred_submitted" not in st.session_state:
     st.session_state.pred_submitted = False
     
