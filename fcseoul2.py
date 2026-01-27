@@ -360,6 +360,7 @@ with tab4:
 
 import gspread
 from google.oauth2.service_account import Credentials
+import time
 
 @st.cache_resource
 def get_gsheet():
@@ -420,9 +421,13 @@ if submitted and not st.session_state.pred_submitted:
         )
     st.session_state.pred_submitted = True
     
-    st.success(
-        "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+    msg = st.empty()
+    msg.success(
+    "🔴⚫ **RED SEOUL!**\n\n"
+    "성공적으로 제출되었습니다"
+    )
+    time.sleep(1.2)
+    msg.empty()
 
 if "pred_submitted_c" not in st.session_state:
     st.session_state.pred_submitted_c = False
@@ -438,9 +443,13 @@ if submitted_c and not st.session_state.pred_submitted_c:
             }
         )
     st.session_state.pred_submitted_c = True
-    st.success(
-        "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+    msg = st.empty()
+    msg.success(
+    "🔴⚫ **RED SEOUL!**\n\n"
+    "성공적으로 제출되었습니다"
+    )
+    time.sleep(1.2)
+    msg.empty()
 
 if "pred_submitted_h" not in st.session_state:
     st.session_state.pred_submitted_h = False
@@ -456,9 +465,13 @@ if submitted_h and not st.session_state.pred_submitted_h:
     }
     )
     st.session_state.pred_submitted_h = True
-    st.success(
+    msg = st.empty()
+    msg.success(
         "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+        "성공적으로 제출되었습니다"
+        )
+    time.sleep(1.2)
+    msg.empty()
 
 if "pred_submitted_photo" not in st.session_state:
     st.session_state.pred_submitted_photo = False
@@ -474,9 +487,13 @@ if submitted_photo and not st.session_state.pred_submitted_photo:
     }
     )
     st.session_state.pred_submitted_photo = True
-    st.success(
-        "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+    msg = st.empty()
+    msg.success(
+    "🔴⚫ **RED SEOUL!**\n\n"
+    "성공적으로 제출되었습니다"
+)
+    time.sleep(1.2)
+    msg.empty()
 
 if "pred_submitted_q1" not in st.session_state:
     st.session_state.pred_submitted_q1 = False
@@ -492,9 +509,13 @@ if submitted_q1 and not st.session_state.pred_submitted_q1:
     }
     )
     st.session_state.pred_submitted_q1 = True
-    st.success(
+    msg = st.empty()
+    msg.success(
         "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+        "성공적으로 제출되었습니다"
+        )
+    time.sleep(1.2)
+    msg.empty()
 
 if "pred_submitted_q2" not in st.session_state:
     st.session_state.pred_submitted_q2 = False
@@ -510,6 +531,10 @@ if submitted_q2 and not st.session_state.pred_submitted_q2:
     }
     )
     st.session_state.pred_submitted_q2 = True
-    st.success(
-        "🔴⚫ **RED SEOUL!**\n\n"
-        "성공적으로 제출되었습니다")
+    msg = st.empty()
+    msg.success(
+    "🔴⚫ **RED SEOUL!**\n\n"
+    "성공적으로 제출되었습니다"
+    )
+    time.sleep(1.2)
+    msg.empty()
