@@ -401,6 +401,9 @@ def append_row_gsheet(row: dict):
 
     row_values = [row.get(h, "") for h in headers]
     ws.append_row(row_values, value_input_option="USER_ENTERED")
+
+if "pred_submitted" not in st.session_state:
+    st.session_state.pred_submitted = False
     
 if submitted and not st.session_state.pred_submitted:    
     append_row_gsheet(
