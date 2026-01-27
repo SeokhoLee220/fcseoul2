@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image, ImageDraw
 
-MAP_PATH = "assets/2번 출입구.jpg"
+MAP_PATH = "assets/서울월드컵경기장.jpg"
 
 
 st.set_page_config(
@@ -153,7 +153,7 @@ with st.container(border=True):
 
 st.divider()
 
-tab1, tab2, tab3 = st.tabs(["오늘의 이벤트", "오늘의 정보", "경기장 정보"])
+tab1, tab2, tab3, tab4 = st.tabs(["Red Seoul", "Red Seoul Mission", "Today's Match", "경기장 정보"])
 
 # 탭 1: 오늘의 이벤트
 
@@ -231,6 +231,43 @@ with tab1:
 
 # 탭 2: 오늘의 정보
 with tab2:
+    b1, b2, b3 = st.columns([1,1,1],gap="large")
+    
+    with b1:
+        st.subheader("포토존 응원 인증")
+        
+        with st.form("form_photozone"):
+            uploaded_photo = st.file_uploader(
+                "응원 포즈 사진을 업로드해주세요",
+                type=["jpg", "jpeg", "png"]
+                )
+
+            submitted_photo = st.form_submit_button("제출")
+    
+    with b2:
+        st.subheader("FC서울 역사 퀴즈 (단답형)") 
+        
+        with st.form("form_quiz1"):
+            quiz_custom1 = ""
+
+            comment1 = st.text_input("FC서울의 창단년도는?")
+            submitted_q1 = st.form_submit_button("제출")
+            
+    with b3:
+        st.subheader("FC서울 역사 퀴즈 (O / X)") 
+        
+        with st.form("form_quiz2"):
+            quiz_custom2 = ""
+
+            comment2 = st.radio(
+                "FC서울의 창단년도는 1983년이다.",
+                ["O", "X"],
+                horizontal=True
+                )
+            submitted_q2 = st.form_submit_button("제출")            
+            
+# 탭 2: 오늘의 정보
+with tab3:
     c1, c2, c3 = st.columns([1, 1, 1], gap="large")
 
     with c1:
@@ -257,19 +294,42 @@ with tab2:
 
 
 # 탭 3: 경기장 정보
-with tab3:
+with tab4:
     left2, right2 = st.columns([1.2, 1], gap="large")
     
     with left2:
         st.subheader("서울월드컵경기장 지도")
-    
-        if os.path.exists(MAP_PATH):
+
+        # (1) 구역별 경로 지도 매핑
+        ROUTE_MAPS = {
+            "구역 1": "assets/routes/2-A.jpg",
+            "구역 2": "assets/routes/2-B.jpg",
+            "구역 3": "assets/routes/2-C.jpg",
+        }
+
+        # (2) 구역 선택 UI
+        selected_zone = st.selectbox(
+            "출입구 2 기준 목적지를 선택하세요",
+            ["전체 지도 보기"] + list(ROUTE_MAPS.keys())
+        )
+        
+        if selected_zone == "전체 지도 보기":
+            if os.path.exists(MAP_PATH):
                 img = Image.open(MAP_PATH)
-                st.image(img, use_container_width=True)
+                st.image(img, caption="서울월드컵경기장 전체 지도", use_container_width=True)
+            else:
+                st.warning("전체 지도 이미지가 없습니다. 경로를 확인하세요.")
         else:
-                st.warning("지도 이미지가 없습니다. assets/서울월드컵경기장.gif 경로를 확인하세요.")
-
-
+            route_img_path = ROUTE_MAPS[selected_zone]
+            if os.path.exists(route_img_path):
+                img = Image.open(route_img_path)
+                st.image(
+                    img,
+                    caption=f"출입구 1 → {selected_zone} 추천 경로",
+                    use_container_width=True
+                )
+            else:
+                st.warning(f"{selected_zone} 경로 지도 이미지가 없습니다.")
     with right2:
         with st.container(border=True):
             st.markdown("**포토존**")
