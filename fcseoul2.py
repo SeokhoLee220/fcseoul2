@@ -424,10 +424,10 @@ if submitted and not st.session_state.pred_submitted:
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if "pred_submitted" not in st.session_state:
-    st.session_state.pred_submitted = False
+if "pred_submitted_c" not in st.session_state:
+    st.session_state.pred_submitted_c = False
     
-if submitted_c and not st.session_state.pred_submitted:    
+if submitted_c and not st.session_state.pred_submitted_c:    
     append_row_gsheet(
         {
             "ts": now_kst_str(),
@@ -437,15 +437,15 @@ if submitted_c and not st.session_state.pred_submitted:
             "응원 한마디": comment, 
             }
         )
-    st.session_state.pred_submitted = True
+    st.session_state.pred_submitted_c = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if "pred_submitted" not in st.session_state:
-    st.session_state.pred_submitted = False
+if "pred_submitted_h" not in st.session_state:
+    st.session_state.pred_submitted_h = False
     
-if submitted_h and not st.session_state.pred_submitted:
+if submitted_h and not st.session_state.pred_submitted_h:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -455,15 +455,15 @@ if submitted_h and not st.session_state.pred_submitted:
         "하프타임 퀴즈 답안": short_q.strip(),
     }
     )
-    st.session_state.pred_submitted = True
+    st.session_state.pred_submitted_h = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if "pred_submitted" not in st.session_state:
-    st.session_state.pred_submitted = False
+if "pred_submitted_photo" not in st.session_state:
+    st.session_state.pred_submitted_photo = False
     
-if submitted_photo and not st.session_state.pred_submitted:
+if submitted_photo and not st.session_state.pred_submitted_photo:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -473,15 +473,15 @@ if submitted_photo and not st.session_state.pred_submitted:
         "사진": uploaded_photo,
     }
     )
-    st.session_state.pred_submitted = True
+    st.session_state.pred_submitted_photo = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if "pred_submitted" not in st.session_state:
-    st.session_state.pred_submitted = False
+if "pred_submitted_q1" not in st.session_state:
+    st.session_state.pred_submitted_q1 = False
     
-if submitted_q1 and not st.session_state.pred_submitted:
+if submitted_q1 and not st.session_state.pred_submitted_q1:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -491,15 +491,15 @@ if submitted_q1 and not st.session_state.pred_submitted:
         "퀴즈 답안1": comment1.strip(),
     }
     )
-    st.session_state.pred_submitted = True
+    st.session_state.pred_submitted_q1 = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if "pred_submitted" not in st.session_state:
-    st.session_state.pred_submitted = False
+if "pred_submitted_q2" not in st.session_state:
+    st.session_state.pred_submitted_q2 = False
     
-if submitted_q2 and not st.session_state.pred_submitted:
+if submitted_q2 and not st.session_state.pred_submitted_q2:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -509,7 +509,7 @@ if submitted_q2 and not st.session_state.pred_submitted:
         "퀴즈 답안2": comment2,
     }
     )
-    st.session_state.pred_submitted = True
+    st.session_state.pred_submitted_q2 = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
