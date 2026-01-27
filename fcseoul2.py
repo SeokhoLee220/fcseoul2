@@ -214,7 +214,7 @@ with tab1:
             submitted = st.form_submit_button(
                 "예측 제출",
                 
-                disabled=(pred_goal == "선택하세요") or (pred_pick == "선택하세요") or (not is_before_kickoff)
+                disabled=not is_before_kickoff
             )    
             
 
@@ -402,3 +402,43 @@ def append_row_gsheet(row: dict):
     row_values = [row.get(h, "") for h in headers]
     ws.append_row(row_values, value_input_option="USER_ENTERED")
     
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "prediction",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "prediction": pred,
+        "auto_prediction": auto_pred,
+        "seoul_goals": seoul_goals,
+        "seoul_conceded": seoul_conceded,
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
+
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "halftime",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "halftime_short_answer": short_q.strip(),
+        "impressive_player": final_player,
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
+
+append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "mom",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "mom": final_mom,
+        "comment": comment.strip(),
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+)
