@@ -8,7 +8,7 @@ import streamlit as st
 from PIL import Image, ImageDraw
 
 MAP_PATH = "assets/서울월드컵경기장.jpg"
-
+PHOTO_ZONE = "assets/포토존.jpg"
 
 st.set_page_config(
     page_title="WELCOME to FC서울 (2번 출입구)",
@@ -248,6 +248,14 @@ with tab2:
     with b1:
         st.subheader("포토존 응원 인증")
         
+        if os.path.exists(PHOTO_ZONE):
+            img = Image.open(PHOTO_ZONE)
+            st.image(img, caption="포토존 위치", use_container_width=True)
+        
+        with st.container(border=True):
+            st.markdown("**포토존**")
+            st.write("3번 출입구 옆 마스코트 인형")
+        
         with st.form("form_photozone"):
             uploaded_photo = st.file_uploader(
                 "응원 포즈 사진을 업로드해주세요",
@@ -343,9 +351,6 @@ with tab4:
             else:
                 st.warning(f"{selected_zone} 경로 지도 이미지가 없습니다.")
     with right2:
-        with st.container(border=True):
-            st.markdown("**포토존**")
-            st.write("3번 출입구 옆 마스코트 인형")
         with st.container(border=True):
             st.markdown("**화장실**")
             st.write("2번 출입구 옆")
