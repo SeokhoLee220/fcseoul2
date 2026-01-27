@@ -197,12 +197,24 @@ with tab1:
             else:
                 auto_pred = "FC서울 패"
 
-            pred_pick = st.selectbox("오늘의 Man of the Match를 예측하세요", CONFIG["mom_candidates"])
+            mom_opts = ["선택하세요"] + CONFIG["mom_candidates"]
+
+            pred_pick = st.selectbox(
+                "오늘의 Man of the Match를 예측하세요",
+                mom_opts,
+                index=0
+                )
+
+            pred_goal = st.selectbox(
+                "오늘 경기 첫 득점 선수를 예측하세요",
+                mom_opts,
+                index=0
+                )
 
             submitted = st.form_submit_button(
                 "예측 제출",
                 
-                disabled=(not is_before_kickoff)
+                disabled=(pred_goal == "선택하세요") or (pred_pick == "선택하세요") or (not is_before_kickoff)
             )    
             
 
