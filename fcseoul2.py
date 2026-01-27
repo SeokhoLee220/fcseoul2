@@ -401,6 +401,7 @@ def append_row_gsheet(row: dict):
 
     row_values = [row.get(h, "") for h in headers]
     ws.append_row(row_values, value_input_option="USER_ENTERED")
+    
 if submitted:    
     append_row_gsheet(
         {
@@ -417,6 +418,10 @@ if submitted:
             }
         )
     
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
+    
 if submitted_c:    
     append_row_gsheet(
         {
@@ -430,6 +435,9 @@ if submitted_c:
             }
         )
 
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
 
 if submitted_h:
     append_row_gsheet(
@@ -443,6 +451,9 @@ if submitted_h:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
 
 if submitted_photo:
     append_row_gsheet(
@@ -456,6 +467,9 @@ if submitted_photo:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
     
 if submitted_q1:
     append_row_gsheet(
@@ -465,7 +479,7 @@ if submitted_q1:
         "nickname": nickname.strip(),
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
-        "퀴즈 답안": comment1.strip(),
+        "퀴즈 답안1": comment1.strip(),
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
@@ -478,7 +492,10 @@ if submitted_q2:
         "nickname": nickname.strip(),
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
-        "퀴즈 답안": comment2,
+        "퀴즈 답안2": comment2,
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
