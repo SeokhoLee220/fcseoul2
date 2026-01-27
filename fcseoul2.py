@@ -426,11 +426,9 @@ def upload_photo_to_drive(uploaded_file, nickname: str, phone4: str, folder_id: 
     return: {"file_id":..., "webViewLink":..., "name":...}
     """
 
-    # 1) 파일명 규칙 강제
     safe_nickname = "".join(c for c in nickname.strip() if c.isalnum() or c in ["_", "-", " "]).strip()
     filename = f"{safe_nickname}-{phone4}.jpg"
 
-    # 2) 업로드 파일을 JPG로 통일 (png/heic 등 들어와도 jpg로 변환)
     img = Image.open(uploaded_file)
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGB")
