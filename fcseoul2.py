@@ -220,11 +220,11 @@ with tab1:
 
         final_mom = ""
 
-        with st.form("form_mom"):
-            mom_custom = ""
+        with st.form("form_cheer"):
+            cheer_custom = ""
 
             comment = st.text_input("FC 서울을 위한 응원 한마디")
-            submitted_m = st.form_submit_button("제출")
+            submitted_c = st.form_submit_button("제출")
 
     with t_half:
         st.subheader("하프타임 퀴즈")
@@ -401,44 +401,84 @@ def append_row_gsheet(row: dict):
 
     row_values = [row.get(h, "") for h in headers]
     ws.append_row(row_values, value_input_option="USER_ENTERED")
+if submitted:    
+    append_row_gsheet(
+        {
+            "ts": now_kst_str(),
+            "type": "prediction",
+            "nickname": nickname.strip(),
+            "phone4": phone4.strip(),
+            "new_fan": is_new_fan,
+            "승무패 예측": pred,
+            "스코어 예측": auto_pred,
+            "MOM" : pred_pick,
+            "첫 득점자" : pred_goal,
+            "match": f"{m['home']} vs {m['away']} ({m['date']})",
+            }
+        )
     
-append_row_gsheet(
-    {
-        "ts": now_kst_str(),
-        "type": "prediction",
-        "nickname": nickname.strip(),
-        "phone4": phone4.strip(),
-        "new_fan": is_new_fan,
-        "prediction": pred,
-        "auto_prediction": auto_pred,
-        "seoul_goals": seoul_goals,
-        "seoul_conceded": seoul_conceded,
-        "match": f"{m['home']} vs {m['away']} ({m['date']})",
-    }
-)
+if submitted_c:    
+    append_row_gsheet(
+        {
+            "ts": now_kst_str(),
+            "type": "cheer",
+            "nickname": nickname.strip(),
+            "phone4": phone4.strip(),
+            "new_fan": is_new_fan,
+            "응원 한마디": comment, 
+            "match": f"{m['home']} vs {m['away']} ({m['date']})",
+            }
+        )
 
-append_row_gsheet(
+
+if submitted_h:
+    append_row_gsheet(
     {
         "ts": now_kst_str(),
         "type": "halftime",
         "nickname": nickname.strip(),
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
-        "halftime_short_answer": short_q.strip(),
-        "impressive_player": final_player,
+        "하프타임 퀴즈 답안": short_q.strip(),
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
-)
+    )
 
-append_row_gsheet(
+if submitted_photo:
+    append_row_gsheet(
     {
         "ts": now_kst_str(),
-        "type": "mom",
+        "type": "photozone",
         "nickname": nickname.strip(),
         "phone4": phone4.strip(),
         "new_fan": is_new_fan,
-        "mom": final_mom,
-        "comment": comment.strip(),
+        "사진": uploaded_photo,
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
-)
+    )
+    
+if submitted_q1:
+    append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "quiz1",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "퀴즈 답안": comment1.strip(),
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+    )
+    
+if submitted_q2:
+    append_row_gsheet(
+    {
+        "ts": now_kst_str(),
+        "type": "quiz2",
+        "nickname": nickname.strip(),
+        "phone4": phone4.strip(),
+        "new_fan": is_new_fan,
+        "퀴즈 답안": comment2,
+        "match": f"{m['home']} vs {m['away']} ({m['date']})",
+    }
+    )
