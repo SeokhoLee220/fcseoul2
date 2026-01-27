@@ -402,7 +402,7 @@ def append_row_gsheet(row: dict):
     row_values = [row.get(h, "") for h in headers]
     ws.append_row(row_values, value_input_option="USER_ENTERED")
     
-if submitted:    
+if submitted and not st.session_state.pred_submitted:    
     append_row_gsheet(
         {
             "ts": now_kst_str(),
@@ -417,12 +417,13 @@ if submitted:
             "match": f"{m['home']} vs {m['away']} ({m['date']})",
             }
         )
+    st.session_state.pred_submitted = True
     
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
     
-if submitted_c:    
+if submitted_c and not st.session_state.pred_submitted:    
     append_row_gsheet(
         {
             "ts": now_kst_str(),
@@ -434,12 +435,12 @@ if submitted_c:
             "match": f"{m['home']} vs {m['away']} ({m['date']})",
             }
         )
-
+    st.session_state.pred_submitted = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if submitted_h:
+if submitted_h and not st.session_state.pred_submitted:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -451,11 +452,12 @@ if submitted_h:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.session_state.pred_submitted = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
 
-if submitted_photo:
+if submitted_photo and not st.session_state.pred_submitted:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -467,11 +469,12 @@ if submitted_photo:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.session_state.pred_submitted = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
     
-if submitted_q1:
+if submitted_q1 and not st.session_state.pred_submitted:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -483,8 +486,12 @@ if submitted_q1:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.session_state.pred_submitted = True
+    st.success(
+        "🔴⚫ **RED SEOUL!**\n\n"
+        "성공적으로 제출되었습니다")
     
-if submitted_q2:
+if submitted_q2 and not st.session_state.pred_submitted:
     append_row_gsheet(
     {
         "ts": now_kst_str(),
@@ -496,6 +503,7 @@ if submitted_q2:
         "match": f"{m['home']} vs {m['away']} ({m['date']})",
     }
     )
+    st.session_state.pred_submitted = True
     st.success(
         "🔴⚫ **RED SEOUL!**\n\n"
         "성공적으로 제출되었습니다")
