@@ -414,7 +414,7 @@ if submitted and not st.session_state.pred_submitted:
             "phone4": phone4.strip(),
             "new_fan": is_new_fan,
             "승무패 예측": pred,
-            "스코어 예측": auto_pred,
+            "스코어 예측": f"{seoul_goals} - {seoul_conceded}",
             "MOM" : pred_pick,
             "첫 득점자" : pred_goal,
             "match": f"{m['home']} vs {m['away']} ({m['date']})",
