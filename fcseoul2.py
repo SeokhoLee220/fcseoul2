@@ -325,7 +325,7 @@ with tab4:
                 img = Image.open(route_img_path)
                 st.image(
                     img,
-                    caption=f"출입구 1 → {selected_zone} 추천 경로",
+                    caption=f"출입구 2 → {selected_zone}",
                     use_container_width=True
                 )
             else:
