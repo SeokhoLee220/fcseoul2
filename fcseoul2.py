@@ -528,15 +528,34 @@ if "pred_submitted_photo" not in st.session_state:
     st.session_state.pred_submitted_photo = False
     
 if submitted_photo and not st.session_state.pred_submitted_photo:
-    append_row_gsheet(
-    {
-        "ts": now_kst_str(),
-        "type": "photozone",
-        "nickname": nickname.strip(),
-        "phone4": phone4.strip(),
-        "사진": uploaded_photo,
-    }
-    )
+    if uploaded_photo is None:
+        st.warning("사진을 업로드한 뒤 제출해 주세요.")
+    else:
+        try:
+            created = upload_photo_to_drive(
+                uploaded_photo,
+                nickname=nickname.strip(),
+                phone4=phone4.strip(),
+                folder_id=DRIVE_FOLDER_ID
+            )
+            photo_url = created.get("webViewLink", "")
+            photo_file_id = created.get("id", "")
+            photo_name = created.get("name", "")
+
+        except Exception as e:
+            st.error(f"사진 업로드 중 오류가 발생했습니다: {e}")
+            st.stop()
+        append_row_gsheet(
+            {
+                "ts": now_kst_str(),
+                "type": "photozone",
+                "nickname": nickname.strip(),
+                "phone4": phone4.strip(),
+                "사진_파일명": photo_name,
+                "사진_file_id": photo_file_id,
+                "사진_url": photo_url,
+            }
+        )
     st.session_state.pred_submitted_photo = True
     msg = st.empty()
     msg.success(
