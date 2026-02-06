@@ -157,7 +157,6 @@ st.divider()
 
 tab1, tab2, tab3, tab4 = st.tabs(["Red Seoul", "Red Seoul Mission", "Today's Match", "경기장 정보"])
 
-# 탭 1: 오늘의 이벤트
 
 with tab1:
     t_pred, t_half= st.tabs(["경기 전", "하프타임"])
@@ -243,7 +242,6 @@ with tab1:
             impressive_custom = ""
             submitted_h = st.form_submit_button("제출")
 
-# 탭 2: 오늘의 정보
 with tab2:
     b1, b2, b3 = st.columns([1,1,1],gap="large")
     
@@ -288,7 +286,6 @@ with tab2:
                 )
             submitted_q2 = st.form_submit_button("제출")            
             
-# 탭 2: 오늘의 정보
 with tab3:
     c1, c2, c3 = st.columns([1, 1, 1], gap="large")
 
@@ -338,7 +335,6 @@ with c3:
                         width=120
                     )
 
-# 탭 3: 경기장 정보
 with tab4:
     left2, right2 = st.columns([1.2, 1], gap="large")
     
