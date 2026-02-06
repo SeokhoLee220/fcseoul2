@@ -10,10 +10,6 @@ from PIL import Image, ImageDraw
 
 MAP_PATH = "assets/서울월드컵경기장.jpg"
 PHOTO_ZONE = "assets/포토존.jpg"
-#########################################
-KEYP1 = "assets/players/송민규.jpg"
-KEYP2 = "assets/players/김진수.jpg"
-KEYP3 = "assets/players/강현무.jpg"
 
 st.set_page_config(
     page_title="WELCOME to FC서울 (2번 출입구)",
@@ -310,25 +306,26 @@ with tab3:
                 st.markdown(f"**{ch['title']}**")
                 st.text(ch["lyrics"])
 
-    with c3:
-        st.subheader("키플레이어 소개")
-        for kp in CONFIG["key_players"]:
-            with st.container(border=True):
-                st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
-                st.write(kp["one_liner"])
-##################################################                
-        if os.path.exists(KEYP1):
-                    img = Image.open(KEYP1)
-                    st.image(img, caption="송민규", use_container_width=True)
-                    
-        if os.path.exists(KEYP2):
-                    img = Image.open(KEYP2)
-                    st.image(img, caption="김진수", use_container_width=True)
-                       
-        if os.path.exists(KEYP3):
-                    img = Image.open(KEYP3)
-                    st.image(img, caption="강현무", use_container_width=True)
+with c3:
+    st.subheader("키플레이어 소개")
 
+    KEY_PLAYER_PHOTOS = {
+        "송민규": "assets/players/송민규.jpg",
+        "김진수": "assets/players/김진수.jpg",
+        "강현무": "assets/players/강현무.jpg",
+    }
+
+    for kp in CONFIG["key_players"]:
+        with st.container(border=True):
+            st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
+            st.write(kp["one_liner"])
+
+            photo_path = KEY_PLAYER_PHOTOS.get(kp["name"])
+            if photo_path and os.path.exists(photo_path):
+                img = Image.open(photo_path)
+                st.image(img, caption=kp["name"], width=120)
+            else:
+                st.caption("선수 사진 준비 중")
 
 # 탭 3: 경기장 정보
 with tab4:
