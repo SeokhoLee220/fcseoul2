@@ -317,15 +317,21 @@ with c3:
 
     for kp in CONFIG["key_players"]:
         with st.container(border=True):
-            st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
-            st.write(kp["one_liner"])
+            col_text, col_img = st.columns([3, 1])
 
-            photo_path = KEY_PLAYER_PHOTOS.get(kp["name"])
-            if photo_path and os.path.exists(photo_path):
-                img = Image.open(photo_path)
-                st.image(img, caption=kp["name"], width=120)
-            else:
-                st.caption("선수 사진 준비 중")
+            with col_text:
+                st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
+                st.write(kp["one_liner"])
+
+            with col_img:
+                photo_path = KEY_PLAYER_PHOTOS.get(kp["name"])
+                if photo_path and os.path.exists(photo_path):
+                    img = Image.open(photo_path)
+                    st.image(
+                        img,
+                        caption=kp["name"],
+                        width=120
+                    )
 
 # 탭 3: 경기장 정보
 with tab4:
