@@ -317,15 +317,15 @@ with tab3:
                 st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
                 st.write(kp["one_liner"])
 ##################################################                
-                if os.path.exists(KEYP1):
+        if os.path.exists(KEYP1):
                     img = Image.open(KEYP1)
                     st.image(img, caption="송민규", use_container_width=True)
                     
-                if os.path.exists(KEYP2):
+        if os.path.exists(KEYP2):
                     img = Image.open(KEYP2)
                     st.image(img, caption="김진수", use_container_width=True)
                        
-                if os.path.exists(KEYP3):
+        if os.path.exists(KEYP3):
                     img = Image.open(KEYP3)
                     st.image(img, caption="강현무", use_container_width=True)
 
