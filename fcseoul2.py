@@ -10,6 +10,10 @@ from PIL import Image, ImageDraw
 
 MAP_PATH = "assets/서울월드컵경기장.jpg"
 PHOTO_ZONE = "assets/포토존.jpg"
+#########################################
+KEYP1 = "assets/players/송민규.jpg"
+KEYP2 = "assets/players/김진수.jpg"
+KEYP3 = "assets/players/강현무.jpg"
 
 st.set_page_config(
     page_title="WELCOME to FC서울 (2번 출입구)",
@@ -312,6 +316,18 @@ with tab3:
             with st.container(border=True):
                 st.markdown(f"**{kp['name']}**  ·  {kp['role']}")
                 st.write(kp["one_liner"])
+##################################################                
+                if os.path.exists(KEYP1):
+                    img = Image.open(KEYP1)
+                    st.image(img, caption="송민규", use_container_width=True)
+                    
+                if os.path.exists(KEYP2):
+                    img = Image.open(KEYP2)
+                    st.image(img, caption="김진수", use_container_width=True)
+                       
+                if os.path.exists(KEYP3):
+                    img = Image.open(KEYP3)
+                    st.image(img, caption="강현무", use_container_width=True)
 
 
 # 탭 3: 경기장 정보
