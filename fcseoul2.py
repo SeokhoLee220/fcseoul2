@@ -487,6 +487,7 @@ if submitted and not st.session_state.pred_submitted:
             "new_fan": is_new_fan,
             "승무패 예측": pred,
             "스코어 예측": f"{seoul_goals} - {seoul_conceded}",
+            "예상 MOM" : pred_pick,
             "첫 득점자" : pred_goal,
             }
         )
